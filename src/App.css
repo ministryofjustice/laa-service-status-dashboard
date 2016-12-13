@@ -1,0 +1,120 @@
+html, body, button, input, table, td, th {
+  font-family: "nta", Arial, sans-serif;
+}
+
+table#status_table {
+  font-size: 14px;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  width: 200px;
+  height: 400px;
+}
+
+#header {
+  background-color: #005ea5;
+  color: white;
+  padding: 5px;
+}
+
+.status_cell {
+  padding: 5px;
+  color: white;
+}
+
+.status_cell.green{
+  background-color: #009900;
+}
+
+.status_cell.red{
+  background-color: #e60000;
+}
+
+.status_cell.amber{
+  background-color: #ff6600;
+}
+
+#notes_row {
+  display: block;
+  padding: 0;
+}
+
+#notes_cell {
+  padding: 0px;
+}
+
+#notes_div {
+  padding: 5px;
+  overflow: hidden;
+  height: 150px;
+  width: 200px;
+  border:solid 1px black;
+  color: black;
+  word-wrap: break-word;
+  margin: 0;
+  font-size: 12px;
+}
+
+#notes_heading {
+  font-weight: bold;
+  line-height: 150%;
+}
+
+#notes_text {
+}
+
+input.email, input.password {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.login-container {
+  padding: 16px;
+  border: 3px solid #f1f1f1;
+  margin: 150px auto;
+  width: 30%;
+}
+@media screen and (max-width: 900px) {
+  .login-container {
+    width: 60%;
+  }
+}
+
+div.error {
+  background-color: #e4134f; 
+}
+
+p.message {
+  padding: 20px;
+  margin: 0 0 32px; 
+  color: #fff;
+}
+
+.service-card {
+  margin: 16px;
+}
+
+.service-card footer {
+  padding: 20px;
+}
+
+span.sign-out {
+  margin: 20px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+div.toolbar {
+  float: right;
+}
+
+.toolbar i {
+  cursor: pointer;
+}
+
+.textarea {
+  margin: 10px;
+}
