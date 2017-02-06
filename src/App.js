@@ -4,11 +4,20 @@ import firebase from 'firebase';
 import './w3.css';
 import './App.css';
 
-const Row = ({ name, status }) => (
-  <tr className="status_row">
-    <td className={`status_cell ${status}`}>{ name }</td>
-  </tr>
-)
+const Row = ({ name, status }) => {
+  const text = {
+    green: 'Good Service',
+    amber: 'Minor Issues',
+    red: 'Severe Issues'
+  }[status];
+  return (
+    <tr className="status_row">
+      <td className={`status_cell ${status}`}>{ name }</td>
+      <td className={`status_cell ${status}`}>{ text }</td>
+    </tr>
+  )
+}
+
 
 class App extends Component {
 
@@ -36,7 +45,7 @@ class App extends Component {
       <table id="status_table">
         <thead>
           <tr>
-            <th id="header" scope="col">Service Status</th>
+            <th id="header" colSpan={ 2 }>Service Status</th>
           </tr>
         </thead>
         <tbody>
@@ -58,10 +67,10 @@ class App extends Component {
                 return null;
               })
           }
-          <tr id="notes_row">
-            <td id="notes_cell">
+          <tr>
+            <td id="notes_cell" colSpan={ 2 }>
               <div id="notes_div">
-                <span id="notes_text">{ this.state.message }</span>
+                { this.state.message }
               </div>
             </td>
           </tr>
