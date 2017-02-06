@@ -6,7 +6,7 @@ table#status_table {
   font-size: 14px;
   margin: 0 0 0 0;
   padding: 0 0 0 0;
-  width: 200px;
+  width: 285px;
   height: 400px;
 }
 
@@ -33,11 +33,6 @@ table#status_table {
   background-color: #ff6600;
 }
 
-#notes_row {
-  display: block;
-  padding: 0;
-}
-
 #notes_cell {
   padding: 0px;
 }
@@ -46,7 +41,6 @@ table#status_table {
   padding: 5px;
   overflow: hidden;
   height: 150px;
-  width: 200px;
   border:solid 1px black;
   color: black;
   word-wrap: break-word;
@@ -57,9 +51,6 @@ table#status_table {
 #notes_heading {
   font-weight: bold;
   line-height: 150%;
-}
-
-#notes_text {
 }
 
 input.email, input.password {
@@ -84,12 +75,12 @@ input.email, input.password {
 }
 
 div.error {
-  background-color: #e4134f; 
+  background-color: #e4134f;
 }
 
 p.message {
   padding: 20px;
-  margin: 0 0 32px; 
+  margin: 0 0 32px;
   color: #fff;
 }
 
