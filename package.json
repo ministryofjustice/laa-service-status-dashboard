@@ -5,6 +5,7 @@
   "devDependencies": {
     "babel-polyfill": "^6.20.0",
     "firebase": "^3.6.3",
+    "firebase-tools": "^3.2.2",
     "react-scripts": "0.8.4"
   },
   "dependencies": {
