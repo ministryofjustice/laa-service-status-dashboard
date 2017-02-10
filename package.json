@@ -1,5 +1,5 @@
 {
-  "name": "laa-dashboard",
+  "name": "laa-dashboard-int",
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
@@ -20,7 +20,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "deploy": "react-scripts build; firebase deploy --project laa-dashboard",
-    "init": "firebase database:set /services services.json -y"
+    "deploy": "react-scripts build; firebase deploy --project laa-dashboard-int",
+    "init": "firebase use laa-dashboard-int; firebase database:set /services services.json -y"
   }
 }
