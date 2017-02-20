@@ -97,14 +97,16 @@ class Admin extends Component {
             </li>
           </ul>
           <div className="w3-container">
-            <Message
-              message={ this.state.message }
-              nextMessage={ this.state.nextMessage }
-              onSave={ this.handleSaveMessage }
-              showModal={ this.state.showModalMessage }
-              onClose={ () => this.setState({ showModalMessage: false }) }
-              onChange={ (val) => this.setState({ nextMessage: val })}
-            />
+            <pre id="notes_text">
+              <Message
+                message={ this.state.message }
+                nextMessage={ this.state.nextMessage }
+                onSave={ this.handleSaveMessage }
+                showModal={ this.state.showModalMessage }
+                onClose={ () => this.setState({ showModalMessage: false }) }
+                onChange={ (val) => this.setState({ nextMessage: val })}
+              />
+            </pre>
           </div>
           <ul className="w3-navbar w3-light-grey w3-xlarge">
             <li className="w3-navitem">Services</li>
