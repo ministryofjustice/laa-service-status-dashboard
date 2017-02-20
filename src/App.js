@@ -70,7 +70,7 @@ class App extends Component {
           <tr>
             <td id="notes_cell" colSpan={ 2 }>
               <div id="notes_div">
-                { this.state.message }
+                <pre id="notes_text">{ this.state.message }</pre>
               </div>
             </td>
           </tr>
