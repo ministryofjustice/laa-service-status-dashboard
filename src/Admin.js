@@ -82,8 +82,8 @@ class Admin extends Component {
     }
     return(
       <div>
-        <div className="w3-container w3-teal">
-          <h2>Admin</h2>
+        <div className="w3-container w3-red">
+          <h2>External Status Admin - ***Amend with caution***</h2>
         </div>
         <div className="container">
           <div className="w3-right-align">
