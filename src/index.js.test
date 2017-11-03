@@ -1,0 +1,23 @@
+import 'babel-polyfill';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Router, Route, browserHistory } from 'react-router'
+import firebase from 'firebase';
+
+import App from './App';
+import Admin from './Admin';
+import './index.css';
+
+firebase.initializeApp({
+  apiKey: "AIzaSyA1w2FNcFGvyFjgh1em0ZchR5mQ5MNxSFE",
+  authDomain: "laa-dashboard-test.firebaseapp.com",
+  databaseURL: "https://laa-dashboard-test.firebaseio.com",
+  messagingSenderId: "779550087954"
+});
+
+ReactDOM.render((
+  <Router history={ browserHistory }>
+    <Route path="/" component={ App } />
+    <Route path="admin" component={ Admin } />
+  </Router>
+), document.getElementById('root'));

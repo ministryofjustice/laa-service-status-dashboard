@@ -83,7 +83,7 @@ class Admin extends Component {
     return(
       <div>
         <div className="w3-container w3-teal">
-          <h2>Admin</h2>
+          <h2>Admin - Internal Status App</h2>
         </div>
         <div className="container">
           <div className="w3-right-align">
