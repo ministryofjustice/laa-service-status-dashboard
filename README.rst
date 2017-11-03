@@ -24,7 +24,7 @@ Install dependencies:
 Develop
 =======
 
-Run against local dev fee calculator api on `http://localhost:8000/api/v1`
+Run against locally on `http://localhost:xxxx`
 
 ::
 
@@ -50,6 +50,10 @@ Initialise
 
 URLs
 
-Front End: `https://laa-dashboard.firebaseapp.com <https://laa-dashboard.firebaseapp.com/>`__
+External Front End: `https://laa-dashboard.firebaseapp.com <https://laa-dashboard.firebaseapp.com/>`__
 
-Admin: `https://laa-dashboard.firebaseapp.com/admin <https://laa-dashboard.firebaseapp.com/admin>`__
+External Admin: `https://laa-dashboard.firebaseapp.com/admin <https://laa-dashboard.firebaseapp.com/admin>`__
+
+Internal Front End: `https://laa-dashboard-int.firebaseapp.com <https://laa-dashboard-int.firebaseapp.com/>`__
+
+Internal Admin: `https://laa-dashboard-int.firebaseapp.com/admin <https://laa-dashboard-int.firebaseapp.com/admin>`__
