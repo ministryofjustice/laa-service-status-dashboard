@@ -53,6 +53,10 @@ class ModalCard extends Component {
                 <input id="red-radio" className="w3-radio" type="radio" name="status" value="red" checked={ this.state.status === 'red' } onClick={ () => this.setState({ status: 'red' }) } readOnly />
                 <label className="w3-validate" htmlFor="red-radio">Red</label>
               </p>
+              <p>
+                <input id="blue-radio" className="w3-radio" type="radio" name="status" value="blue" checked={ this.state.status === 'blue' } onClick={ () => this.setState({ status: 'blue' }) } readOnly />
+                <label className="w3-validate" htmlFor="blue-radio">Blue</label>
+              </p>
               <h4>Show on the dashboard?</h4>
               <p>
                 <input id="display-radio" className="w3-radio" type="radio" name="display" value="yes" checked={ this.state.display } onClick={ () => this.setState({ display: true }) } readOnly />
@@ -79,7 +83,7 @@ class ModalCard extends Component {
 }
 
 const ServiceCard = ({ id, name, status, display, onSetStatus, onToggleStatus, onDelete }) => {
-  const colors = ['green', 'amber', 'red'];
+  const colors = ['green', 'amber', 'red', 'blue'];
   if (colors.indexOf(status) === -1) {
     status = 'red';
   }

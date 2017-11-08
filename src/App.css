@@ -33,6 +33,10 @@ table#status_table {
   background-color: #ff6600;
 }
 
+.status_cell.blue{
+  background-color: #2196F3;
+}
+
 #notes_cell {
   padding: 0px;
 }
