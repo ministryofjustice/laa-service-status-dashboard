@@ -8,7 +8,8 @@ const Row = ({ name, status }) => {
   const text = {
     green: 'Good Service',
     amber: 'Minor Issues',
-    red: 'Severe Issues'
+    red: 'Severe Issues',
+    blue: 'Scheduled Outage'
   }[status];
   return (
     <tr className="status_row">
