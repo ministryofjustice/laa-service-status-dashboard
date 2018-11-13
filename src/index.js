@@ -9,10 +9,10 @@ import Admin from './Admin';
 import './index.css';
 
 firebase.initializeApp({
-  apiKey: "AIzaSyDxH0W0xrJdCReFj-zScY5gFLIbOo98DP0",
-  authDomain: "laa-dashboard.firebaseapp.com",
-  databaseURL: "https://laa-dashboard.firebaseio.com",
-  messagingSenderId: "419470059645"
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOM,
+  databaseURL: process.env.REACT_APP_DB_URL,
+  messagingSenderId: process.env.REACT_APP_MESSAGE_ID
 });
 
 ReactDOM.render((

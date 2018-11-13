@@ -1,5 +1,20 @@
 {
   "projects": {
-    "default": "laa-dashboard"
+    "default": "laa-dashboard-test"
+  },
+  "targets": {
+    "laa-dashboard-test": {
+      "hosting": {
+        "test": [
+          "laa-dashboard-test"
+        ],
+        "prod-int": [
+          "laa-dashboard-int"
+        ],
+        "prod-ext": [
+          "laa-dashboard"
+        ]
+      }
+    }
   }
 }

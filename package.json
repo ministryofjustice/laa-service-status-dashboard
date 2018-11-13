@@ -4,8 +4,7 @@
   "private": true,
   "devDependencies": {
     "babel-polyfill": "^6.20.0",
-    "firebase": "^3.6.3",
-    "firebase-tools": "^3.2.2",
+    "firebase": "5.5.8",
     "react-scripts": "0.8.4"
   },
   "dependencies": {
@@ -17,10 +16,15 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "sh -ac '. .env.${REACT_APP_ENV}; react-scripts build'",
+    "build:test": "REACT_APP_ENV=test npm run build",
+    "build:prod-int": "REACT_APP_ENV=prod-int npm run build",
+    "build:prod-ext": "REACT_APP_ENV=prod-ext npm run build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "deploy": "react-scripts build; firebase deploy --project laa-dashboard",
-    "init": "firebase database:set /services services.json -y"
+    "deploy-test": "npm run build:test; firebase deploy --project laa-dashboard-test",
+    "deploy-prod-int": "npm run build:prod-int; firebase deploy --project laa-dashboard-int",
+    "deploy-prod-ext": "npm run build:prod-ext; firebase deploy --project laa-dashboard",
+    "init": "firebase use laa-dashboard-test; firebase database:set /services services.json -y"
   }
 }
