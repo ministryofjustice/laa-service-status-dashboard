@@ -1,77 +1,77 @@
- [
-    {
-      "status": "green",
-      "display": true,
-      "name": "CCLF"
-    },
-    {
-      "status": "green",
-      "display": true,
-      "name": "CCMS"
-    },
-    {
-      "status": "green",
-      "display": true,
-      "name": "CCR"
-    },
-    {
-      "status": "green",
-      "display": true,
-      "name": "CWA"
-    },
-    {
-      "status": "green",
-      "display": true,
-      "name": "EForms"
-    },
-    {
-      "status": "green",
-      "display": true,
-      "name": "MAAT"
-    },
-    {
-      "status": "green",
-      "display": true,
-      "name": "MAAT/LIBRA"
-    },
-    {
-      "status": "green",
-      "display": true,
-      "name": "MI"
-    },
-    {
-      "status": "green",
-      "display": true,
-      "name": "OBIEE"
-    },
-    {
-      "status": "green",
-      "display": true,
-      "name": "PIMS"
-    },
-    {
-      "status": "green",
-      "display": true,
-      "name": "LAA Online Portal"
-    },
-    {
-      "status": "green",
-      "display": true,
-      "name": "Outlook"
-    },
-    {
-      "status": "green",
-      "display": true,
-      "name": "Internet/Intranet"
-    },
-    {
-      "status": "green",
-      "display": true,
-      "name": "Telephony"
-    },
-    {
-      "status": "green",
-      "display": true,
-      "name": "Remote Access"
-    }
-  ]
+[
+  {
+    "status": "green",
+    "display": true,
+    "name": "CCLF"
+  },
+  {
+    "status": "green",
+    "display": true,
+    "name": "CCMS"
+  },
+  {
+    "status": "green",
+    "display": true,
+    "name": "CCR"
+  },
+  {
+    "status": "green",
+    "display": true,
+    "name": "CWA"
+  },
+  {
+    "status": "green",
+    "display": true,
+    "name": "EForms"
+  },
+  {
+    "status": "green",
+    "display": true,
+    "name": "MAAT"
+  },
+  {
+    "status": "green",
+    "display": true,
+    "name": "MAAT/LIBRA"
+  },
+  {
+    "status": "green",
+    "display": true,
+    "name": "MI"
+  },
+  {
+    "status": "green",
+    "display": true,
+    "name": "OBIEE"
+  },
+  {
+    "status": "green",
+    "display": true,
+    "name": "PIMS"
+  },
+  {
+    "status": "green",
+    "display": true,
+    "name": "LAA Online Portal"
+  },
+  {
+    "status": "green",
+    "display": true,
+    "name": "Outlook"
+  },
+  {
+    "status": "green",
+    "display": true,
+    "name": "Internet/Intranet"
+  },
+  {
+    "status": "green",
+    "display": true,
+    "name": "Telephony"
+  },
+  {
+    "status": "green",
+    "display": true,
+    "name": "Remote Access"
+  }
+]

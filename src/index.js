@@ -1,23 +1,14 @@
-import 'babel-polyfill';
+import 'react-app-polyfill/ie11';
+import 'react-app-polyfill/stable';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, browserHistory } from 'react-router'
-import firebase from 'firebase';
 
+import './assets/css/index.css';
 import App from './App';
-import Admin from './Admin';
-import './index.css';
-
-firebase.initializeApp({
-  apiKey: process.env.REACT_APP_API_KEY,
-  authDomain: process.env.REACT_APP_AUTH_DOM,
-  databaseURL: process.env.REACT_APP_DB_URL,
-  messagingSenderId: process.env.REACT_APP_MESSAGE_ID
-});
 
 ReactDOM.render((
-  <Router history={ browserHistory }>
-    <Route path="/" component={ App } />
-    <Route path="admin" component={ Admin } />
-  </Router>
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
 ), document.getElementById('root'));

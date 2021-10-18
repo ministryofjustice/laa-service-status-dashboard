@@ -12,19 +12,19 @@
         "node": true
     },
     "settings": {
-        "ecmascript": 6,
+        "ecmascript": 6
     },
     "rules": {
         "quotes": 0,
         "no-underscore-dangle": 0,
         "prefer-const": 1,
         "indent": [2, 2, {
-          "VariableDeclarator": {
-            "var": 2,
-            "let": 2,
-            "const": 3
-          },
-          "SwitchCase": 1
-        }],
+            "VariableDeclarator": {
+                "var": 2,
+                "let": 2,
+                "const": 3
+            },
+            "SwitchCase": 1
+        }]
     }
 }
