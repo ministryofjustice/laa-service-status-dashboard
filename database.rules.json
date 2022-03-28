@@ -1,6 +1,12 @@
 {
   "rules": {
-    ".read": true,
-    ".write": "auth != null"
+    "message": {
+      ".read": true,
+      ".write": "auth.uid != null"
+    },
+    "services": {
+      ".read": true,
+      ".write": "auth.uid != null"
+    }
   }
 }
