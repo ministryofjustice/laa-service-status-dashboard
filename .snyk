@@ -1,0 +1,18 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.25.0
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-LODASH-567746:
+    - react-data-grid > react-dnd > lodash:
+        patched: '2022-06-15T14:34:19.462Z'
+    - react-data-grid > react-dnd-html5-backend > lodash:
+        patched: '2022-06-15T14:34:19.462Z'
+    - react-data-grid > react-contextmenu > redux > lodash:
+        patched: '2022-06-15T14:34:19.462Z'
+    - react-data-grid > react-dnd > dnd-core > lodash:
+        patched: '2022-06-15T14:34:19.462Z'
+    - react-data-grid > react-dnd > dnd-core > redux > lodash:
+        patched: '2022-06-15T14:34:19.462Z'
+    - react-data-grid > ron-react-autocomplete > browser-sync > easy-extender > lodash:
+        patched: '2022-06-15T14:34:19.462Z'

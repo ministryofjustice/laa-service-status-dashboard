@@ -12,7 +12,8 @@
     "react": "^15.4.1",
     "react-data-grid": "^1.0.71",
     "react-dom": "^15.4.1",
-    "react-router": "^3.0.0"
+    "react-router": "^3.0.0",
+    "@snyk/protect": "latest"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -25,6 +26,9 @@
     "deploy-test": "npm run build:test; firebase deploy --project laa-dashboard-test",
     "deploy-prod-int": "npm run build:prod-int; firebase deploy --project laa-dashboard-int",
     "deploy-prod-ext": "npm run build:prod-ext; firebase deploy --project laa-dashboard",
-    "init": "firebase use laa-dashboard-test; firebase database:set /services services.json -y"
-  }
+    "init": "firebase use laa-dashboard-test; firebase database:set /services services.json -y",
+    "prepare": "npm run snyk-protect",
+    "snyk-protect": "snyk-protect"
+  },
+  "snyk": true
 }
