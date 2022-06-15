@@ -1,0 +1,23 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.25.0
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:debug:20170905':
+    - react-data-grid > ron-react-autocomplete > engine.io > debug:
+        patched: '2022-06-15T14:34:56.301Z'
+    - react-data-grid > ron-react-autocomplete > socket.io-client > debug:
+        patched: '2022-06-15T14:34:56.301Z'
+    - react-data-grid > ron-react-autocomplete > socket.io-client > engine.io-client > debug:
+        patched: '2022-06-15T14:34:56.301Z'
+    - react-data-grid > ron-react-autocomplete > socket.io-client > socket.io-parser > debug:
+        patched: '2022-06-15T14:34:56.301Z'
+  'npm:ms:20170412':
+    - react-data-grid > ron-react-autocomplete > engine.io > debug > ms:
+        patched: '2022-06-15T14:34:56.301Z'
+    - react-data-grid > ron-react-autocomplete > socket.io-client > debug > ms:
+        patched: '2022-06-15T14:34:56.301Z'
+    - react-data-grid > ron-react-autocomplete > socket.io-client > engine.io-client > debug > ms:
+        patched: '2022-06-15T14:34:56.301Z'
+    - react-data-grid > ron-react-autocomplete > socket.io-client > socket.io-parser > debug > ms:
+        patched: '2022-06-15T14:34:56.301Z'
