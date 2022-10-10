@@ -1,21 +1,22 @@
 import React from 'react';
 
 const ServiceCard = ({
-  id, name, status, display, onSetStatus, onToggleStatus, onDelete
+  id, name, status, display,
+  onSetStatus, onToggleStatus, onUpdate, onDelete, onError
 }) => {
   const colours = ['green', 'amber', 'red', 'blue'];
   if (colours.indexOf(status) === -1) {
     status = 'red';
   }
 
-  let className;
+  let className = 'w3-card-2 w3-animate-opacity service-card'
   if (display) {
-    className = `w3-card-2 service-card w3-${status}`;
+    className = `${className} w3-${status}`;
   } else {
     if (status === 'amber') {
-      className = `w3-card-2 service-card w3-pale-yellow`;
+      className = `${className} w3-pale-yellow`;
     } else {
-      className = `w3-card-2 service-card w3-pale-${status}`;
+      className = `${className} w3-pale-${status}`;
     };
   }
 
@@ -27,7 +28,9 @@ const ServiceCard = ({
             role="button"
             aria-label={ `setStatus-${colour}-${id}` }
             className={ `w3-btn w3-${colour}` }
-            onClick={ () => onSetStatus(id, colour) }
+            onClick={
+              () => onSetStatus(colour).then(onUpdate).catch(onError)
+            }
           >{ colour }</a>
         </li>
       );
@@ -52,7 +55,9 @@ const ServiceCard = ({
           <a
             role="button"
             aria-label={ `toggleStatus-${id}` }
-            onClick={ () => onToggleStatus(id) }
+            onClick={
+              () => onToggleStatus().then(onUpdate).catch(onError)
+            }
           >
             <i className="fa fa-pause"></i>
           </a>
@@ -64,7 +69,9 @@ const ServiceCard = ({
         <a
           role="button"
           aria-label={ `toggleStatus-${id}` }
-          onClick={ () => onToggleStatus(id) }
+          onClick={
+            () => onToggleStatus().then(onUpdate).catch(onError)
+          }
         >
           <i className="fa fa-play"></i>
         </a>
@@ -82,7 +89,7 @@ const ServiceCard = ({
             const msg =
               `Are you sure you want to delete service ${name}?`
             if (confirm(msg)) {
-              onDelete(id)
+              onDelete().then(onUpdate).catch(onError)
             };
           }
         }

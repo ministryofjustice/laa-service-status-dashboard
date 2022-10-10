@@ -1,27 +1,29 @@
 {
   "name": "laa-dashboard",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
+  "license": "MIT",
   "devDependencies": {
-    "@babel/eslint-parser": "^7.17.0",
-    "@babel/preset-react": "^7.16.7",
-    "@testing-library/jest-dom": "^5.16.3",
-    "@testing-library/react": "^12.1.4",
-    "@testing-library/user-event": "^13.5.0",
-    "audit-ci": "^6.1.2",
+    "@babel/eslint-parser": "^7.19.1",
+    "@babel/preset-react": "^7.18.6",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^14.4.3",
     "postcss-normalize": "^10.0.1",
-    "react-scripts": "^5.0.0"
+    "react-scripts": "^5.0.1"
   },
   "dependencies": {
-    "firebase": "^9.6.10",
+    "@aws-sdk/client-dynamodb": "^3.186.0",
+    "@aws-sdk/lib-dynamodb": "^3.186.0",
+    "aws-amplify": "^4.3.37",
     "font-awesome": "^4.7.0",
-    "react": "^17.0.2",
+    "react": "^18.2.0",
     "react-app-polyfill": "^3.0.0",
-    "react-dom": "^17.0.2",
-    "react-router-dom": "^6.2.2"
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.4.2"
   },
   "engines": {
-    "node": "^16.13.0"
+    "node": "^16.17.0"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -30,20 +32,16 @@
     ]
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "sh -ac '. .env.${REACT_APP_ENV} && react-scripts start'",
     "build": "sh -ac '. .env.${REACT_APP_ENV} && react-scripts build'",
-    "build:test": "REACT_APP_ENV=test npm run build",
-    "build:prod-int": "REACT_APP_ENV=prod-int npm run build",
-    "build:prod-ext": "REACT_APP_ENV=prod-ext npm run build",
+    "build:test": "REACT_APP_ENV=test yarn run build",
+    "build:prod-int": "REACT_APP_ENV=prod-int yarn run build",
+    "build:prod-ext": "REACT_APP_ENV=prod-ext yarn run build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "deploy-test": "build:test; firebase deploy --project laa-dashboard-test",
-    "deploy-prod-int": "yarn run build:prod-int; firebase deploy --project laa-dashboard-int",
-    "deploy-prod-ext": "yarn run build:prod-ext; firebase deploy --project laa-dashboard",
-    "init": "firebase use laa-dashboard-test; firebase database:set /services services.json -y",
     "lint": "eslint .",
     "lint:fix": "eslint --fix --ext .js,.jsx .",
-    "audit": "audit-ci --skip-dev"
+    "audit": "yarn audit --groups dependencies"
   },
   "browserslist": {
     "production": [

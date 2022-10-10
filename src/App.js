@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './assets/css/App.css';
 import Dashboard from './pages/Dashboard';
 import Admin from './pages/Admin';
+import './cognito';
 
 const App = () => {
   return (

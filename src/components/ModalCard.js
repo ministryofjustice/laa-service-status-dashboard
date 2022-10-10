@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const ModalCard = ( { show, onSave, onClose }) => {
+const ModalCard = ( { show, onSave, onUpdate, onClose, onError }) => {
   const defaultState = {
     name: '',
     status: 'green',
@@ -8,14 +8,26 @@ const ModalCard = ( { show, onSave, onClose }) => {
   };
 
   const [state, setState] = useState(defaultState);
+  const [errorMessage, setErrorMessage] = useState(null);
 
-  const saveAndClose = () => {
+  const resetAndClose = async() => {
+    setErrorMessage(null);
+    onClose();
+  }
+
+  const saveAndClose = async () => {
+    setErrorMessage(null);
+
     if (state.name !== '') {
-      onSave(state)
-        .then(() => {
-          setState(defaultState);
-          onClose();
-        });
+      try {
+        await onSave(state)
+        onUpdate()
+        setState(defaultState);
+        onClose();
+      } catch (error) {
+        setErrorMessage('Update failed, try again later.');
+        onError(error);
+      }
     }
   }
 
@@ -124,10 +136,18 @@ const ModalCard = ( { show, onSave, onClose }) => {
             </p>
           </div>
           <div className="w3-section">
+            {
+              errorMessage ?
+                (<div className="error">
+                  <p className="message">{ errorMessage }</p>
+                </div>) : null
+            }
+          </div>
+          <div className="w3-section">
             <button className={ saveBtnClass } onClick={ saveAndClose }>
               Save
             </button>
-            <button className="w3-btn w3-red" onClick={ onClose }>
+            <button className="w3-btn w3-red" onClick={ resetAndClose }>
               Cancel
             </button>
           </div>

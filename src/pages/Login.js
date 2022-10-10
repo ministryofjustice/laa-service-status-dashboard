@@ -1,33 +1,37 @@
 import React, { useState } from 'react';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-
-import firebaseApp from '../firebase';
-
-const auth = getAuth(firebaseApp);
+import { Auth } from 'aws-amplify';
 
 const Login = ({ onSuccess }) => {
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginFailed, setLoginFailed] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const doLogin = async (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
 
     if (email !== '' && password !== '') {
       try {
-        await signInWithEmailAndPassword(auth, email, password)
-        onSuccess();
-      } catch(error) {
+        setLoading(true);
+        const user = await Auth.signIn(email, password);
+        if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
+          alert('Password change is required. Please contact the Administrator');
+        }
+        onSuccess(user)
+      } catch (error) {
+        setLoading(false);
         setLoginFailed(true);
-        setErrorMessage(error.message);
+        setErrorMessage(error.message||'An error occurred. Try again later');
       }
     }
     else if (email === '') {
+      setLoading(false);
       setLoginFailed(true);
       setErrorMessage('Email required');
     }
     else if (password === '') {
+      setLoading(false);
       setLoginFailed(true);
       setErrorMessage('Password required');
     }
@@ -35,7 +39,7 @@ const Login = ({ onSuccess }) => {
 
   return (
     <div className="login-container">
-      <form onSubmit={doLogin} name="form">
+      <form onSubmit={ handleLogin } name="form">
         <h1>Login</h1>
         {
           loginFailed ?
@@ -66,7 +70,7 @@ const Login = ({ onSuccess }) => {
         <button
           className="w3-btn-block w3-padding-large w3-green"
           type="submit"
-        >Login</button>
+        >{ loading ? 'Please wait...' : 'Login' }</button>
       </form>
     </div>
   );

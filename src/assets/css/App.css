@@ -41,18 +41,7 @@ table#status_table {
   padding: 0px;
 }
 
-#notes_div {
-  padding: 5px;
-  overflow: hidden;
-  height: 155px;
-  border:solid 1px black;
-  color: black;
-  word-wrap: break-word;
-  margin: 0;
-  font-size: 12px;
-}
-
-#notes_text {
+.message-box {
   font-family: "nta", Arial, sans-serif;
   font-size: 14px;
   white-space: pre-wrap;       /* Since CSS 2.1 */
@@ -61,6 +50,23 @@ table#status_table {
   white-space: -o-pre-wrap;    /* Opera 7 */
   word-wrap: break-word;       /* Internet Explorer 5.5+ */
   margin:0;
+}
+
+.message-box--pub {
+  padding: 5px;
+  overflow: hidden;
+  border:solid 1px black;
+  color: black;
+  word-wrap: break-word;
+  margin: 0;
+  font-size: 14px;
+  overflow: hidden;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 14;
+  -webkit-box-orient: vertical;
+  min-height: 155px;
+  max-height: 300px;
 }
 
 #notes_heading {

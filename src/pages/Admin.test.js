@@ -1,328 +1,244 @@
-import Admin from './Admin'
-import { onAuthStateChanged, signOut } from 'firebase/auth';
+import Admin from './Admin';
+import { Auth } from 'aws-amplify';
+
 import {
-  onValue,
-  push,
-  ref,
-  remove,
-  set
-} from 'firebase/database';
+  getMessage,
+  getServices,
+  putService,
+  deleteService,
+  updateMessage,
+  updateServiceStatus,
+  toggleServiceDisplay
+} from '../dynamodb';
 
-import { render, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import '@testing-library/jest-dom'
+import { render, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom';
+import { fireEvent } from '@testing-library/react';
 
-jest.mock('firebase/app', () => ({
-  initializeApp: jest.fn()
-}));
+global.console = {
+  ...console,
+  error: jest.fn()
+};
 
-jest.mock('firebase/auth', () => ({
-  getAuth: jest.fn(),
-  onAuthStateChanged: jest.fn(),
-  signOut: jest.fn(),
-}));
-
-jest.mock('firebase/database', () => ({
-  child: jest.fn(),
-  getDatabase: jest.fn(),
-  onValue: jest.fn(),
-  push: jest.fn(),
-  ref: jest.fn(),
-  remove: jest.fn(),
-  set: jest.fn()
+jest.mock('../dynamodb', () => ({
+  getMessage: jest.fn(),
+  getServices: jest.fn(),
+  putService: jest.fn(),
+  deleteService: jest.fn(),
+  updateMessage: jest.fn(),
+  updateServiceStatus: jest.fn(),
+  toggleServiceDisplay: jest.fn(),
 }));
 
 describe('Admin component', () => {
   it('renders the Login component when not logged in', async () => {
-    onAuthStateChanged.mockImplementation((_auth, user) => {
-      user(null)
-    })
+    Auth.currentAuthenticatedUser = jest.fn()
+      .mockRejectedValue(new Error('Auth Error'));
+    getServices.mockResolvedValue([]);
+    getMessage.mockResolvedValue('');
 
-    const { getByRole } = render(<Admin />)
-
-    expect(getByRole('heading')).toHaveTextContent('Login')
-    expect(getByRole('form')).toBeInTheDocument()
-  })
-
-  it('renders the Admin component when logged in', async () => {
-    onAuthStateChanged.mockImplementation((_auth, user) => {
-      user({ email: 'admin@example.com' })
-    })
-
-    const { getByText } = render(<Admin />)
-
-    expect(getByText('admin@example.com')).toBeInTheDocument()
-    expect(getByText('Message')).toBeInTheDocument()
-    expect(getByText('Services')).toBeInTheDocument()
-  })
-
-  it('displays a message', async () => {
-    onAuthStateChanged.mockImplementation((_auth, user) => {
-      user({ email: 'admin@example.com' })
-    })
-
-    ref.mockImplementation((_database, path) => {
-      return `${path}-ref`
-    })
-
-    onValue.mockImplementation((ref, snapshot) => {
-      if (ref === '/message-ref') {
-        snapshot({ val() { return 'test message' } })
-      }
-    })
-
-    const { getByText } = render(<Admin />)
-
-    expect(getByText('test message')).toBeInTheDocument()
-  })
-
-  it('displays a list of services', async () => {
-    onAuthStateChanged.mockImplementation((_auth, user) => {
-      user({ email: 'admin@example.com' })
-    })
-
-    ref.mockImplementation((_database, path) => {
-      return `${path}-ref`
-    })
-
-    onValue.mockImplementation((ref, snapshot) => {
-      if (ref === '/services-ref') {
-        snapshot([
-          {
-            key: '1',
-            val() {
-              return {
-                display: true, name: 'ServiceB', status: 'red'
-              }
-            }
-          }, {
-            key: '2',
-            val() {
-              return {
-                display: false, name: 'ServiceA', status: 'green'
-              }
-            }
-          }
-        ])
-      }
-    })
-
-    const { getByText } = render(<Admin />)
+    const { getByRole } = render(<Admin />);
 
     await waitFor(() => {
-      expect(getByText('ServiceB')).toBeInTheDocument()
-      expect(getByText('ServiceA')).toBeInTheDocument()
-    })
+      expect(getByRole('heading')).toHaveTextContent('Login');
+      expect(getByRole('form')).toBeInTheDocument();
+    });
   })
 
-  it('allows the user to sign out', async () => {
-    onAuthStateChanged.mockImplementation((_auth, user) => {
-      user({ email: 'admin@example.com' })
+  describe('when logged in', () => {
+    beforeEach(() => {
+      Auth.currentAuthenticatedUser = jest.fn().mockResolvedValue({
+        username: 'admin@example.com'
+      });
+
+      getServices.mockResolvedValue([
+        { display: true, name: 'ServiceB', status: 'red' },
+        { display: false, name: 'ServiceA', status: 'green' }
+      ]);
+      getMessage.mockResolvedValue('test message');
+    });
+
+    it('renders the Admin component', async () => {
+      const { getByText } = render(<Admin />);
+
+      await waitFor(() => {
+        expect(getByText('admin@example.com')).toBeInTheDocument();
+        expect(getByText('Message')).toBeInTheDocument();
+        expect(getByText('Services')).toBeInTheDocument();
+      });
+    });
+
+    it('displays the status message', async () => {
+      const { getByText } = render(<Admin />);
+
+      await waitFor(() => {
+        expect(getByText('test message')).toBeInTheDocument();
+      });
+    });
+
+    it('displays the list of all services', async () => {
+      const { getByText } = render(<Admin />);
+
+      await waitFor(() => {
+        expect(getByText('ServiceB')).toBeInTheDocument();
+        expect(getByText('ServiceA')).toBeInTheDocument();
+      })
+    });
+
+    it('allows the user to sign out', async () => {
+      Auth.signOut = jest.fn().mockResolvedValue();
+
+      const { findByText, getByRole } = render(<Admin />);
+
+      fireEvent.click(await findByText('Sign out'));
+
+      await waitFor(() => {
+        expect(Auth.signOut).toBeCalledTimes(1);
+      });
+
+      await waitFor(() => {
+        expect(getByRole('heading')).toHaveTextContent('Login');
+        expect(getByRole('form')).toBeInTheDocument();
+      });
+    });
+
+    it('allows the user to edit a message', async () => {
+      const { findByRole, getByText } = render(<Admin />);
+
+      fireEvent.click(
+        await findByRole('button', { name: 'editMessage' }));
+
+      await userEvent.type(
+        await findByRole('textbox', { name: "messageInput" }),
+        '...with more info');
+
+      updateMessage.mockResolvedValue();
+      getMessage.mockResolvedValue('test message...with more info');
+
+      fireEvent.click(await findByRole('button', { name: 'Save' }));
+
+      await waitFor(() => {
+        expect(updateMessage).toBeCalledWith(
+          'test message...with more info', 'admin@example.com');
+      })
+
+      await waitFor(() => {
+        expect(getByText('test message...with more info'))
+          .toBeInTheDocument();
+      })
+    });
+
+    it('allows the user to change service status', async () => {
+      getServices.mockResolvedValue([
+        { display: true, name: 'ServiceA', status: 'green' },
+        { display: true, name: 'ServiceB', status: 'red' }
+      ]);
+      getMessage.mockResolvedValue('test message');
+
+      updateServiceStatus.mockResolvedValue();
+
+      const { getByRole, findByRole } = render(<Admin />);
+
+      getServices.mockResolvedValue([
+        { display: true, name: 'ServiceA', status: 'red' },
+        { display: true, name: 'ServiceB', status: 'red' }
+      ]);
+
+      await fireEvent.click(
+        await findByRole('button', { name: 'setStatus-red-0' }));
+
+      await waitFor(() => {
+        expect(updateServiceStatus)
+          .toBeCalledWith('ServiceA', 'red', 'admin@example.com');
+      });
+
+      await waitFor(() => {
+        expect(
+          getByRole('button', { name: 'setStatus-red-0' }))
+          .toHaveClass('w3-disabled');
+
+        expect(
+          getByRole('button', { name: 'setStatus-green-0' }))
+          .not
+          .toHaveClass('w3-disabled');
+      });
     })
 
-    const { getByText } = render(<Admin />)
+    it('allows the user to pause a service', async () => {
+      Auth.currentAuthenticatedUser = jest.fn().mockResolvedValue({
+        username: 'admin@example.com'
+      });
 
-    userEvent.click(getByText('Sign out'))
+      getServices.mockResolvedValue([
+        { display: true, name: 'ServiceA', status: 'red' }
+      ]);
+      getMessage.mockResolvedValue('test message');
 
-    await waitFor(() => {
-      expect(signOut).toBeCalledTimes(1)
-    })
-  })
+      toggleServiceDisplay.mockResolvedValue();
 
-  it('allows the user to edit a message', async () => {
-    onAuthStateChanged.mockImplementation((_auth, user) => {
-      user({ email: 'admin@example.com' })
-    })
+      const { getByRole, findByRole } = render(<Admin />);
 
-    ref.mockImplementation((_database, path) => {
-      return `${path}-ref`
-    })
+      await fireEvent.click(
+        await findByRole('button', { name: 'toggleStatus-0' }));
 
-    onValue.mockImplementationOnce((ref, snapshot) => {
-      if (ref === '/message-ref') {
-        snapshot({ val() { return 'test message' } })
-      }
-    })
+      await waitFor(() => {
+        expect(toggleServiceDisplay)
+          .toBeCalledWith('ServiceA', false, 'admin@example.com');
+      });
 
-    const { getByText, getByRole } = render(<Admin />)
-
-    userEvent.click(getByRole('button', { name: 'editMessage' }))
-
-    await waitFor(() => {
-      getByRole('heading', { name: 'Edit Message' })
+      await waitFor(() => {
+        expect(
+          getByRole('button', { name: 'toggleStatus-0' }).children[0])
+          .toHaveClass('fa-pause');
+      });
     })
 
-    set.mockImplementation((_ref, _message) => Promise.resolve({}))
+    it('allows the user to delete a service', async () => {
+      getServices.mockResolvedValue([
+        { display: true, name: 'ServiceA', status: 'red' }
+      ]);
+      getMessage.mockResolvedValue('test message');
 
-    userEvent.type(getByRole('textbox', { name: 'messageInput' }), 'hi')
-    userEvent.click(getByRole('button', { name: 'Save' }))
+      deleteService.mockResolvedValue();
 
-    await waitFor(() => {
-      expect(set).toBeCalledWith('/message-ref', 'hi')
-      expect(getByText('hi')).toBeInTheDocument()
-    })
-  })
+      global.confirm = jest.fn(() => true);
 
-  it('allows the user to change service status', async () => {
-    onAuthStateChanged.mockImplementation((_auth, user) => {
-      user({ email: 'admin@example.com' })
-    })
+      const { findByRole } = render(<Admin />);
 
-    ref.mockImplementation((_database, path) => {
-      return `${path}-ref`
-    })
+      await fireEvent.click(
+        await findByRole('button', { name: 'deleteService-0' }));
 
-    onValue.mockImplementation((ref, snapshot) => {
-      if (ref === '/services-ref') {
-        snapshot([
-          {
-            key: '1',
-            val() {
-              return {
-                display: true, name: 'ServiceA', status: 'red'
-              }
-            }
-          }
-        ])
-      }
+      await waitFor(() => {
+        expect(window.confirm).toHaveBeenCalled();
+      });
+
+      await waitFor(() => {
+        expect(deleteService).toBeCalledWith('ServiceA');
+      })
     })
 
-    set.mockImplementation((_ref, _status) => Promise.resolve({}))
+    it('allows the user to create a service', async () => {
+      getServices.mockResolvedValue([]);
+      putService.mockResolvedValue();
 
-    const { getByRole } = render(<Admin />)
+      const { getByRole, findByRole } = render(<Admin />);
 
-    userEvent.click(getByRole('button', { name: 'setStatus-amber-1' }))
+      await fireEvent.click(
+        await findByRole('button', { name: 'addService' }));
 
-    await waitFor(() => {
-      expect(set).toBeCalledWith('/services/1/status-ref', 'amber')
+      const nameInput = await getByRole('heading', { name: 'Name' })
+        .nextElementSibling;
+      await userEvent.type(nameInput, 'SvcA');
 
-      expect(
-        getByRole('button', { name: 'setStatus-red-1' }))
-        .toHaveClass('w3-disabled')
+      await fireEvent.click(await findByRole('radio', { name: 'Amber' }));
 
-      expect(
-        getByRole('button', { name: 'setStatus-amber-1' }))
-        .not
-        .toHaveClass('w3-disabled')
-    })
-  })
+      await fireEvent.click(await findByRole('button', { name: 'Save' }));
 
-  it('allows the user to pause a service', async () => {
-    onAuthStateChanged.mockImplementation((_auth, user) => {
-      user({ email: 'admin@example.com' })
-    })
-
-    ref.mockImplementation((_database, path) => {
-      return `${path}-ref`
-    })
-
-    onValue.mockImplementation((ref, snapshot) => {
-      if (ref === '/services-ref') {
-        snapshot([
-          {
-            key: '1',
-            val() {
-              return {
-                display: true, name: 'ServiceA', status: 'red'
-              }
-            }
-          }
-        ])
-      }
-    })
-
-    set.mockImplementation((_ref, _status) => Promise.resolve({}))
-
-    const { getByRole } = render(<Admin />)
-
-    userEvent.click(getByRole('button', { name: 'toggleStatus-1' }))
-
-    await waitFor(() => {
-      expect(set).toBeCalledWith('/services/1/display-ref', false)
-
-      expect(
-        getByRole('button', { name: 'toggleStatus-1' }).children[0])
-        .toHaveClass('fa-pause')
-    })
-  })
-
-  it('allows the user to delete a service', async () => {
-    onAuthStateChanged.mockImplementation((_auth, user) => {
-      user({ email: 'admin@example.com' })
-    })
-
-    ref.mockImplementation((_database, path) => {
-      return `${path}-ref`
-    })
-
-    onValue.mockImplementation((ref, snapshot) => {
-      if (ref === '/services-ref') {
-        snapshot([
-          {
-            key: '1',
-            val() {
-              return {
-                display: true, name: 'ServiceA', status: 'red'
-              }
-            }
-          }
-        ])
-      }
-    })
-
-    remove.mockImplementation((_ref) => Promise.resolve({}))
-
-    global.confirm = jest.fn(() => true)
-
-    const { getByRole } = render(<Admin />)
-
-    userEvent.click(getByRole('button', { name: 'deleteService-1' }))
-
-    await waitFor(() => {
-      expect(window.confirm).toHaveBeenCalled()
-      expect(remove).toBeCalledWith('/services/1-ref')
-    })
-  })
-
-  it('allows the user to create a service', async () => {
-    onAuthStateChanged.mockImplementation((_auth, user) => {
-      user({ email: 'admin@example.com' })
-    })
-
-    ref.mockImplementation((_database, path) => {
-      return `${path}-ref`
-    })
-
-    onValue.mockImplementation((ref, snapshot) => {
-      if (ref === '/services-ref') {
-        snapshot([])
-      }
-    })
-
-    push.mockImplementation((_dbRef, _name) => {
-      return { key: 1 }
-    })
-
-    set.mockImplementation((dbRef, value) => Promise.resolve({}))
-
-    const { getByRole } = render(<Admin />)
-
-    userEvent.click(getByRole('button', { name: 'addService' }))
-
-    await waitFor(() => {
-      getByRole('heading', { name: 'Add Service' })
-    })
-
-    userEvent.type(
-      getByRole('heading', { name: 'Name' }).nextElementSibling, 'SvcA')
-    userEvent.click(getByRole('radio', { name: 'Amber' }))
-
-    userEvent.click(getByRole('button', { name: 'Save' }))
-
-    await waitFor(() => {
-      expect(set).toBeCalledWith(
-        '/services/1-ref',
-        { name: 'SvcA', status: 'amber', display: true })
-    })
-  })
-})
+      await waitFor(() => {
+        expect(putService)
+          .toBeCalledWith('SvcA', 'amber', true, 'admin@example.com');
+      });
+    });
+  });
+});

@@ -9,7 +9,7 @@ It's primarly embedded in the
 
 ## Dependencies
 
-* Node.js `v14.18.1` (you can install with
+* Node.js `v16.18.1` (you can install with
   [`nvm`](https://github.com/nvm-sh/nvm))
 * Firebase CLI for deployment (you can install
   [`firebase-tools`](https://github.com/firebase/firebase-tools)
@@ -24,7 +24,7 @@ It's primarly embedded in the
 * Run locally with: `yarn run start`
 
 **Please note**: by default [http://localhost:3000](http://localhost:3000)
-will point to the Test Firebase database, unless you change the existing
+will point to the Test , unless you change the existing
 `.env.*` file(s).
 
 ## Testing
@@ -46,25 +46,24 @@ two separate production environments in Firebase.
 
 | Environment | Description | URLs |
 | --- | --- | --- |
-| Test | Used for local development | [Dashboard](https://laa-dashboard-test.firebaseapp.com) / [Admin](https://laa-dashboard-test.firebaseapp.com/admin) |
-| Production _**Internal**_ | Used for services *not* available on the LAA Portal and TV screens | [Dashboard](https://laa-dashboard-int.firebaseapp.com) / [Admin](https://laa-dashboard-int.firebaseapp.com/admin) |
-| Production _**External**_ | Used for services available on the LAA Portal | [Dashboard](https://laa-dashboard.firebaseapp.com) / [Admin](https://laa-dashboard.firebaseapp.com/admin) |
+| Test | Used for local development | [Dashboard](TBD) / [Admin](TBD/admin) |
+| Production _**Internal**_ | Used for services *not* available on the LAA Portal and TV screens | [Dashboard](TBD) / [Admin](TBD/admin) |
+| Production _**External**_ | Used for services available on the LAA Portal | [Dashboard](TBD) / [Admin](TBD/admin) |
 
 ## Auth
 
-Users are managed under Google Cloud Platform IAM. New users are created
-manually in Firebase.
+Users are part of an Amazon Cognito Identity Pool. New users are created
+manually.
 
 ## Deployment
 
-The dashboard is currently hosted on Google Cloud Platform as a firebase
-projects.
+The dashboard is currently hosted on TBD.
 
 Before running the following commands, make sure you have installed the
-Firebase CLI and are logged in:
+TBD CLI and are logged in:
 
 ```sh
-firebase login
+TBD
 ```
 
 ### Test

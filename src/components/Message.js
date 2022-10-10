@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const ModalTextArea = ({
-  show, prevMessage, nextMessage,
+  show, prevMessage, nextMessage, errorMessage,
   onChange, onSave, onClose
 }) => {
   const style = show ? { display : 'block' } : { display : 'none' };
@@ -23,6 +23,14 @@ const ModalTextArea = ({
             />
           </div>
           <div className="w3-section">
+            {
+              errorMessage ?
+                (<div className="error">
+                  <p className="message">{ errorMessage }</p>
+                </div>) : null
+            }
+          </div>
+          <div className="w3-section">
             <button
               className={ saveBtnClass }
               onClick={ onSave }
@@ -40,11 +48,27 @@ const ModalTextArea = ({
 
 const Message = ({
   message, prevMessage, nextMessage, showModal,
-  onChange, onSave, onClose
+  onChange, onSave, onUpdate, onClose, onError
 }) => {
-  const saveAndClose = () => {
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  const resetAndClose = async() => {
+    setErrorMessage(null);
+    onClose();
+  }
+
+  const saveAndClose = async () => {
+    setErrorMessage(null);
+
     if (nextMessage !== prevMessage) {
-      onSave(nextMessage).then(onClose);
+      try {
+        await onSave(nextMessage)
+        onUpdate()
+        onClose();
+      } catch (error) {
+        setErrorMessage('Update failed, try again later.');
+        onError(error);
+      }
     }
   }
 
@@ -56,10 +80,11 @@ const Message = ({
       <ModalTextArea
         prevMessage={ message }
         nextMessage={ nextMessage }
+        errorMessage={ errorMessage }
         show={ showModal }
-        onClose={ onClose }
+        onClose={ resetAndClose }
         onSave={ saveAndClose }
-        onChange={ (e) => onChange(e.target.value)}
+        onChange={ e => onChange(e.target.value) }
       />
     </div>
   );

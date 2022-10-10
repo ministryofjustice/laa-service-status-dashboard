@@ -1,33 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { getDatabase, onValue, ref } from 'firebase/database';
 
 import '../assets/css/w3.css';
-import firebaseApp from '../firebase';
 import StatusRows from '../components/StatusRow';
-
-const database = getDatabase(firebaseApp);
+import { getMessage, getServices } from '../dynamodb';
+import { filterServices } from '../utils'
 
 const App = () => {
-  const [services, setServices] = useState({});
+  const [services, setServices] = useState([]);
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    const servicesRef = ref(database, '/services');
-
-    onValue(servicesRef, (snapshot) => {
-      const services = {};
-      snapshot.forEach((child) => {
-        services[child.key] = child.val()
-      });
-      setServices(services);
-    });
-
-    const messageRef = ref(database, '/message');
-
-    return onValue(messageRef, (snapshot) => {
-      setMessage(snapshot.val() || '');
-    });
+    fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      const services = await getServices()
+      setServices(services);
+
+      const message = await getMessage()
+      setMessage(message);
+    } catch (error) {
+      console.warn(error);
+    }
+  }
 
   return (
     <table id="status_table">
@@ -38,32 +34,21 @@ const App = () => {
       </thead>
       <tbody>
         {
-          Object.keys(services)
-            .map(key => [key, services[key]])
-            .sort((pairA, pairB) => {
-              if (pairA[1].name.trim().toLowerCase() >
-                pairB[1].name.trim().toLowerCase()) {
-                return 1;
-              };
-              return -1;
-            })
-            .map(([key, { name, status, display }]) => {
-              if (display) {
-                return (
-                  <StatusRows
-                    key={ key }
-                    name={ name }
-                    status={ status }
-                  />
-                );
-              };
-              return null;
+          filterServices(services, true)
+            .map((service, key) => {
+              return (
+                <StatusRows
+                  key={ key }
+                  name={ service.name }
+                  status={ service.status }
+                />
+              )
             })
         }
         <tr>
           <td id="notes_cell" colSpan={ 2 }>
-            <div id="notes_div">
-              <pre id="notes_text">{ message }</pre>
+            <div className="message-box message-box--pub">
+              { message }
             </div>
           </td>
         </tr>
