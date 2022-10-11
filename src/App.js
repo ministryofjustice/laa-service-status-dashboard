@@ -1,84 +1,20 @@
-import React, { Component } from 'react';
-import firebase from 'firebase';
+import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import './w3.css';
-import './App.css';
+import './assets/css/App.css';
+import Dashboard from './pages/Dashboard';
+import Admin from './pages/Admin';
+import './cognito';
 
-const Row = ({ name, status }) => {
-  const text = {
-    green: 'Good Service',
-    amber: 'Minor Issues',
-    red: 'Severe Issues',
-    blue: 'Scheduled Outage'
-  }[status];
+const App = () => {
   return (
-    <tr className="status_row">
-      <td className={`status_cell ${status}`}>{ name }</td>
-      <td className={`status_cell ${status}`}>{ text }</td>
-    </tr>
-  )
-}
-
-
-class App extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {services: {}, message: ''};
-  }
-
-  componentWillMount() {
-    const database = firebase.database();
-    database.ref('/services').on('value', (snapshot) => {
-      const services = {};
-      snapshot.forEach((child) => {
-        services[child.key] = child.val()
-      });
-      this.setState({ services });
-    });
-    database.ref('/message').on('value', (snapshot) => {
-      this.setState({message: snapshot.val() || ''});
-    });
-  }
-
-  render() {
-    return (
-      <table id="status_table">
-        <thead>
-          <tr>
-            <th id="header" colSpan={ 2 }>Service Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            Object.keys(this.state.services)
-              .map((key) => [key, this.state.services[key]])
-              .sort((pairA, pairB) => {
-                if (pairA[1].name.trim().toLowerCase() > pairB[1].name.trim().toLowerCase()) {
-                  return 1;
-                };
-                return -1;
-              })
-              .map(([key, { name, status, display }]) => {
-                if (display) {
-                  return (
-                    <Row key={ key } name={ name } status={ status } />
-                    );
-                };
-                return null;
-              })
-          }
-          <tr>
-            <td id="notes_cell" colSpan={ 2 }>
-              <div id="notes_div">
-                <pre id="notes_text">{ this.state.message }</pre>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    );
-  }
-}
+    <BrowserRouter>
+      <Routes>
+        <Route exact path='/' element={<Dashboard />}></Route>
+        <Route path='/admin' element={<Admin />}></Route>
+      </Routes>
+    </BrowserRouter>
+  );
+};
 
 export default App;
