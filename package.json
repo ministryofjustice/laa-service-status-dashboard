@@ -5,7 +5,7 @@
   "devDependencies": {
     "babel-polyfill": "^6.20.0",
     "firebase": "5.5.8",
-    "react-scripts": "0.8.4"
+    "react-scripts": "5.0.1"
   },
   "dependencies": {
     "font-awesome": "^4.7.0",
